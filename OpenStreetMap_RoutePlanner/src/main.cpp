@@ -27,7 +27,7 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
     return std::move(contents);
 }
 
-void ReadUserInput(float &startx,float &starty, float &endx, float &endy){
+void ReadUserInput(float &startx, float &starty, float &endx, float &endy){
     std::cout << "\n\n Welcome to the Path Planning App" << std::endl;
     std::cout << "Enter a number between 0-100 for start_x: ";
     std::cin >> startx;
@@ -95,6 +95,7 @@ int main(int argc, const char **argv)
     RouteModel model{osm_data};
 	
 	float start_x, start_y, end_x, end_y;
+	ReadUserInput(start_x, start_y, end_x, end_y);
 	
     // Create RoutePlanner object and perform A* search.
     RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
