@@ -63,11 +63,10 @@ bool Compare (RouteModel::Node * Node1, RouteModel::Node * Node2){
 }
 
 RouteModel::Node *RoutePlanner::NextNode() {
-    float f1 = Node1->g_value + Node1->h_value;
-    float f2 = Node2->g_value + Node2->h_value;
-    if(f1 > f2){
-        return true;
-    }
+	std::sort(open_list.begin(), open_list.end(), Compare);
+	RouteModel::Node * lowest_FvalueNode = open_list.back();
+	open_list.pop_back();
+	return lowest_FvalueNode;
 }
 
 
