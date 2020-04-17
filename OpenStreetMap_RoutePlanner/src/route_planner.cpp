@@ -39,7 +39,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     for(RouteModel::Node *neighbor: current_node->neighbors){
         if(neighbor->visited == false){
             neighbor->parent = current_node;
-            neighbor->h_value = CalculateHValue(current_node);
+            neighbor->h_value = CalculateHValue(neighbor);
             neighbor->g_value = current_node->g_value + neighbor->distance(*current_node);
             open_list.push_back(neighbor);
             neighbor->visited = true;
@@ -60,6 +60,7 @@ bool Compare (RouteModel::Node * Node1, RouteModel::Node * Node2){
     if(f1 > f2){
         return true;
     }
+	return false;
 }
 
 RouteModel::Node *RoutePlanner::NextNode() {
