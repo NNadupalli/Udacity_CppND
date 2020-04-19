@@ -39,7 +39,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     for(RouteModel::Node *neighbor: current_node->neighbors){
         if(neighbor->visited == false){
             neighbor->parent = current_node;
-            neighbor->h_value = CalculateHValue(current_node);
+            neighbor->h_value = CalculateHValue(neighbor);
             neighbor->g_value = current_node->g_value + neighbor->distance(*current_node);
             open_list.push_back(neighbor);
             neighbor->visited = true;
@@ -60,14 +60,14 @@ bool Compare (RouteModel::Node * Node1, RouteModel::Node * Node2){
     if(f1 > f2){
         return true;
     }
+	return false;
 }
 
 RouteModel::Node *RoutePlanner::NextNode() {
-    float f1 = Node1->g_value + Node1->h_value;
-    float f2 = Node2->g_value + Node2->h_value;
-    if(f1 > f2){
-        return true;
-    }
+	std::sort(open_list.begin(), open_list.end(), Compare);
+	RouteModel::Node * lowest_FvalueNode = open_list.back();
+	open_list.pop_back();
+	return lowest_FvalueNode;
 }
 
 
@@ -110,16 +110,16 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 
 void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
-    std::vector<RouteModel::Node> FinalPath;
+    open_list.push_back(start_node);
+    start_node->visited = true;
 
     // TODO: Implement your solution here.
     while(!open_list.empty()){
         current_node = NextNode();
         if(current_node == end_node){
-            FinalPath = ConstructFinalPath(current_node);
+            m_Model.path = ConstructFinalPath(current_node);
             return;
         }
         AddNeighbors(current_node);        
     }
-    m_Model.path = FinalPath ;
 }
